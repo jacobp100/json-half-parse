@@ -41,7 +41,7 @@ describe('json', () => {
     });
 
     it('parses strings', () => {
-      ['"test"', '"\'"', '"\\""', '"\\\\"'].forEach(assertParse);
+      ['""', '"test"', '"\'"', '"\\""', '"\\\\"'].forEach(assertParse);
     });
 
     it('parses arrays', () => {

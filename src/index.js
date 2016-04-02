@@ -1,7 +1,7 @@
 /* eslint no-use-before-define: [0] */
 
 const whiteSpace = /^[\s\n\t]+/;
-const stringRe = /^"(?:\\\\|\\"|[^"])+"/;
+const stringRe = /^"(?:\\\\|\\"|[^"])*"/;
 const numberRe = /^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[Ee][+-]?[0-9]+)?/;
 const nullRe = /^null/;
 const booleanRe = /^(?:true|false)/;
