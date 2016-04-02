@@ -9,7 +9,7 @@ describe('json', () => {
     const { error, value } = parse(input);
     assert.strictEqual(error, null, `Error for input ${input}`);
     const expected = JSON.parse(input);
-    assert.deepStrictEqual(value, expected, `No value for input ${input}`);
+    assert.deepStrictEqual(value, expected, `Incorrect value for input ${input}`);
   };
 
   const assertFailsWithNoValue = (input) => {
@@ -20,8 +20,8 @@ describe('json', () => {
 
   const assertFailsWithRecovery = ([input, expected]) => {
     const { error, value } = parse(input);
-    assert.ok(error, `For input ${input}`);
-    assert.deepStrictEqual(value, expected, `For input ${input}`);
+    assert.ok(error, `No error for input ${input}`);
+    assert.deepStrictEqual(value, expected, `Incorrect value for input ${input}`);
   };
 
   describe('parse is consistent with native JSON parse', () => {
@@ -64,15 +64,28 @@ describe('json', () => {
 
   describe('parse throws for', () => {
     it('invalid numbers', () => {
-      ['00', '1E0.5', '-'].forEach(assertFailsWithNoValue);
+      ['-'].forEach(assertFailsWithNoValue);
     });
 
     it('invalid strings', () => {
-      ['"\\\\""', '"test'].forEach(assertFailsWithNoValue);
+      ['"test'].forEach(assertFailsWithNoValue);
     });
   });
 
   describe('parse throws for, but partially parses', () => {
+    it('invalid numbers', () => {
+      [
+        ['00', 0],
+        ['1E0.5', 1],
+      ].forEach(assertFailsWithRecovery);
+    });
+
+    it('invalid strings', () => {
+      [
+        ['"\\\\""', '\\'],
+      ].forEach(assertFailsWithRecovery);
+    });
+
     it('invalid arrays', () => {
       [
         ['[,]', []],

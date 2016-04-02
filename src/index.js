@@ -149,7 +149,6 @@ export const parseWithAst = text => {
   const didFinishParsing = message || !remainingText;
   if (!didFinishParsing) {
     message = unexpectedToken(remainingText[0]);
-    value = undefined;
   }
   const error = message
     ? { message, remainingText, location: getLocation(text, remainingTextWithWhitespace) }
