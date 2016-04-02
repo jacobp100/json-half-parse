@@ -106,13 +106,13 @@ const parseValue = text => {
 
   if (simpleValue) {
     const { match } = simpleValue;
-    return [null, advanceText(text, match), simpleValue];
+    return [null, advanceText(remainingText, match), simpleValue];
   } else if (arrayStartRe.test(remainingText)) {
-    return matchArray(advanceOne(text));
+    return matchArray(advanceOne(remainingText));
   } else if (objectStartRe.test(remainingText)) {
-    return matchObject(advanceOne(text));
+    return matchObject(advanceOne(remainingText));
   }
-  return unexpectedToken(text);
+  return unexpectedToken(remainingText);
 };
 
 const matchObject = parseCommaSeparated('object', parseObjectEntry, objectEndRe);
@@ -131,8 +131,8 @@ const resolveAst = ({ type, value }) => {
   return value;
 };
 
-export const getLocation = (text, remainingText) => { // exported for tests
-  const offset = text.length - remainingText.length;
+export const getLocation = (text, remainingTextLength) => { // exported for tests
+  const offset = text.length - remainingTextLength.length;
   const parsedText = text.substring(0, offset);
   const line = parsedText.split('\n').length;
   const column = (line > 1)
@@ -144,13 +144,15 @@ export const getLocation = (text, remainingText) => { // exported for tests
 
 export const parseWithAst = text => {
   let [message, remainingText, value] = parseValue(text); // eslint-disable-line
+  const remainingTextWithWhitespace = remainingText;
+  remainingText = advanceWhitespace(remainingText);
   const didFinishParsing = message || !remainingText;
   if (!didFinishParsing) {
     message = unexpectedToken(remainingText[0]);
     value = undefined;
   }
   const error = message
-    ? { message, remainingText, location: getLocation(text, remainingText) }
+    ? { message, remainingText, location: getLocation(text, remainingTextWithWhitespace) }
     : null;
   return { error, value };
 };

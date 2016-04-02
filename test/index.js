@@ -56,6 +56,10 @@ describe('json', () => {
         '{ "a": 1, "b": 2, "c": 3 }', '{ "a": {} }',
       ].forEach(assertParse);
     });
+
+    it('ignores leading and trailling whitespace', () => {
+      ['    null', '    true     ', 'false   ', '\n\n\t5\n\n\t'].forEach(assertParse);
+    });
   });
 
   describe('parse throws for', () => {
