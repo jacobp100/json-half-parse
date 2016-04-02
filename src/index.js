@@ -148,7 +148,7 @@ export const parseWithAst = text => {
   remainingText = advanceWhitespace(remainingText);
   const didFinishParsing = message || !remainingText;
   if (!didFinishParsing) {
-    message = unexpectedToken(remainingText[0]);
+    message = unexpectedToken(remainingText[0])[0];
   }
   const error = message
     ? { message, remainingText, location: getLocation(text, remainingTextWithWhitespace) }
