@@ -131,6 +131,17 @@ const resolveAst = ({ type, value }) => {
   return value;
 };
 
+export const getLocation = (text, remainingText) => { // exported for tests
+  const offset = text.length - remainingText.length;
+  const parsedText = text.substring(0, offset);
+  const line = parsedText.split('\n').length;
+  const column = (line > 1)
+    ? (parsedText.length - parsedText.lastIndexOf('\n') - 1)
+    : parsedText.length;
+
+  return { offset, line, column };
+};
+
 export const parseWithAst = text => {
   let [message, remainingText, value] = parseValue(text); // eslint-disable-line
   const didFinishParsing = message || !remainingText;
@@ -138,7 +149,9 @@ export const parseWithAst = text => {
     message = unexpectedToken(remainingText[0]);
     value = undefined;
   }
-  const error = message ? { message, remainingText } : null;
+  const error = message
+    ? { message, remainingText, location: getLocation(text, remainingText) }
+    : null;
   return { error, value };
 };
 

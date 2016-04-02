@@ -23,6 +23,10 @@ const { error, value } = json.parse(string);
 ```
 
 `value` is an object like that returned `JSON.parse`.
+`error` is an object represented as `{ message, remainingText, location }`
+
+* `location` is represented as `{ line, column, offset }`, where offset is character index
+
 
 ```javascript
 const { error, value } = json.parseWithAst(string);
