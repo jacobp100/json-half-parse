@@ -3,7 +3,7 @@
   "version": "0.0.6",
   "description": "",
   "main": "src/index.js",
-  "module": true,
+  "type": "module",
   "scripts": {
     "test": "NODE_ENV=test mocha --compilers js:babel-core/register"
   },
